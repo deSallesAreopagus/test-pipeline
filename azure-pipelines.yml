@@ -23,7 +23,7 @@ stages:
             displayName: 'Install Node.js'
           
           - script: |
-              echo 'MONGODB_URL=$(MONGODB_URL)' >> .env
+              echo 'MONGODB_TEST_URL=$(MONGODB_TEST_URL)' >> .env
               npm install
               npm run build --if-present
               npm run test --if-present

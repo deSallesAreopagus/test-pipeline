@@ -19,7 +19,7 @@ describe('TestesController (integration)', () => {
       imports: [
         TestesModule,
         ConfigModule.forRoot(),
-        MongooseModule.forRoot(process.env.MONGODB_URL),
+        MongooseModule.forRoot(process.env.MONGODB_TEST_URL),
         MongooseModule.forFeature([
           { name: Testes.name, schema: TestesSchema },
         ]),

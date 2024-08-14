@@ -35,7 +35,7 @@ describe('TestesController (e2e)', () => {
       imports: [
         TestesModule,
         ConfigModule.forRoot(),
-        MongooseModule.forRoot(process.env.MONGODB_URL),
+        MongooseModule.forRoot(process.env.MONGODB_TEST_URL),
       ],
     })
       .overrideProvider(TestesService)

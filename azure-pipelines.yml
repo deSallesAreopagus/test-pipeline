@@ -6,7 +6,7 @@ variables:
 
 pool:
   name: Teste
-  vmImage: $(vmImageName)
+  vmImage: 'ubuntu-latest'
 
 stages:
   - stage: Build

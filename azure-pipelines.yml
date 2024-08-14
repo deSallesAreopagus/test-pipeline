@@ -4,6 +4,10 @@ trigger:
 variables:
   vmImageName: 'ubuntu-latest'
 
+pools:
+  name: Teste
+  vmImage: $(vmImageName)
+
 stages:
   - stage: Build
     displayName: Build stage

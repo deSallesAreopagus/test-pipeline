@@ -14,13 +14,26 @@ stages:
         steps:
           - task: NodeTool@0
             inputs:
-              versionSpec: '18.x'
+              version: '18.x'
             displayName: 'Install Node.js'
           
           - script: |
               echo 'MONGODB_TEST_URL=$(MONGODB_TEST_URL)' >> .env
               npm install
+            displayName: 'npm install'
+
+          - script: |
               npm run build --if-present
-              npm run test --if-present
+            displayName: 'npm build'
+
+          - script: |
+              npm run test:unit --if-present
+            displayName: 'unit test'
+
+          - script: |
+              npm run test:integration --if-present
+            displayName: 'integration test'
+
+          - script: |
               npm run test:e2e --if-present
-            displayName: 'npm install, build and test'
+            displayName: 'e2e test'

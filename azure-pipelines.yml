@@ -3,15 +3,14 @@ trigger:
 
 pool:
   name: Teste
+  vmImage: ubuntu-latest
 
 stages:
   - stage: Build
     displayName: Build stage
     jobs:
       - job: Build
-        displayName:
-        pool:
-          vmImage: Teste
+        displayName: 'Build'
         
         steps:
           - task: NodeTool@0

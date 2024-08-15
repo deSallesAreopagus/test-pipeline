@@ -28,6 +28,7 @@ stages:
               targetPath: $(Build.ArtifactStagingDirectory)
               artifact: build
               publishLocation: pipeline
+              artifactName: 'build'
 
   - stage: Test
     displayName: Test stage
@@ -45,7 +46,7 @@ stages:
             inputs:
               artifact: build
               path: $(Build.ArtifactStagingDirectory)
-          
+
           - script: |
               npm install
               npm run test:unit
@@ -53,7 +54,7 @@ stages:
 
           - task: PublishPipelineArtifact@1
             inputs:
-              targetPath: ./reports/unit
+              targetPath: $(Build.ArtifactStagingDirectory)/reports/unit
               artifact: unit-tests
               publishLocation: pipeline
 
@@ -69,15 +70,16 @@ stages:
             inputs:
               artifact: build
               path: $(Build.ArtifactStagingDirectory)
-          
+
           - script: |
+              cp $(Build.ArtifactStagingDirectory)/.env $(System.DefaultWorkingDirectory)/.env
               npm install
               npm run test:integration
             displayName: 'Integration tests'
 
           - task: PublishPipelineArtifact@1
             inputs:
-              targetPath: ./reports/integration
+              targetPath: $(Build.ArtifactStagingDirectory)/reports/integration
               artifact: integration-tests
               publishLocation: pipeline
 
@@ -93,14 +95,15 @@ stages:
             inputs:
               artifact: build
               path: $(Build.ArtifactStagingDirectory)
-          
+
           - script: |
+              cp $(Build.ArtifactStagingDirectory)/.env $(System.DefaultWorkingDirectory)/.env
               npm install
               npm run test:e2e
             displayName: 'E2E tests'
 
           - task: PublishPipelineArtifact@1
             inputs:
-              targetPath: ./reports/e2e
+              targetPath: $(Build.ArtifactStagingDirectory)/reports/e2e
               artifact: e2e-tests
               publishLocation: pipeline

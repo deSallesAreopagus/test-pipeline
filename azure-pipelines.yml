@@ -23,27 +23,22 @@ stages:
               npm run build --if-present
             displayName: 'npm install and build'
 
-          - task: PublishPipelineArtifact@1
-            inputs:
-              targetPath: ./build
-              artifact: build
-              publishLocation: pipeline
-
-  - stage: Test
-    displayName: Test stage
-    dependsOn: Build
-    jobs:
-      - job: UnitTests
-        displayName: 'Unit Tests'
-        steps:
-          - task: DownloadPipelineArtifact@2
-            inputs:
-              artifact: build
-              path: ./build
+          - script: |
+              ls -la
+              ls -la build
+            displayName: 'List files and build directory'
           
           - script: |
               npm run test:unit
             displayName: 'Unit tests'
+
+          - script: |
+              npm run test:integration
+            displayName: 'Integration tests'
+            
+          - script: |
+              npm run test:e2e
+            displayName: 'E2E tests'
 
           - task: PublishPipelineArtifact@1
             inputs:
@@ -51,35 +46,11 @@ stages:
               artifact: unit-tests
               publishLocation: pipeline
 
-      - job: IntegrationTests
-        displayName: 'Integration Tests'
-        steps:
-          - task: DownloadPipelineArtifact@2
-            inputs:
-              artifact: build
-              path: ./build
-          
-          - script: |
-              npm run test:integration
-            displayName: 'Integration tests'
-
           - task: PublishPipelineArtifact@1
             inputs:
               targetPath: ./reports/integration
               artifact: integration-tests
               publishLocation: pipeline
-
-      - job: E2ETests
-        displayName: 'E2E Tests'
-        steps:
-          - task: DownloadPipelineArtifact@2
-            inputs:
-              artifact: build
-              path: ./build
-          
-          - script: |
-              npm run test:e2e
-            displayName: 'E2E tests'
 
           - task: PublishPipelineArtifact@1
             inputs:

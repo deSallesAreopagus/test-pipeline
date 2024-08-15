@@ -48,6 +48,7 @@ stages:
               path: $(Build.ArtifactStagingDirectory)
 
           - script: |
+              cp $(Build.ArtifactStagingDirectory)/.env $(System.DefaultWorkingDirectory)/.env
               npm install
               npm run test:unit
             displayName: 'Unit tests'

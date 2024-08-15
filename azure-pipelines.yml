@@ -25,7 +25,7 @@ stages:
 
           - task: PublishPipelineArtifact@1
             inputs:
-              targetPath: $(Build.SourcesDirectory)
+              targetPath: $(Build.ArtifactStagingDirectory)
               artifact: build
               publishLocation: pipeline
 
@@ -44,7 +44,7 @@ stages:
           - task: DownloadPipelineArtifact@2
             inputs:
               artifact: build
-              path: $(Build.SourcesDirectory)
+              path: $(Build.ArtifactStagingDirectory)
           
           - script: |
               npm install
@@ -68,7 +68,7 @@ stages:
           - task: DownloadPipelineArtifact@2
             inputs:
               artifact: build
-              path: $(Build.SourcesDirectory)
+              path: $(Build.ArtifactStagingDirectory)
           
           - script: |
               npm install
@@ -92,7 +92,7 @@ stages:
           - task: DownloadPipelineArtifact@2
             inputs:
               artifact: build
-              path: $(Build.SourcesDirectory)
+              path: $(Build.ArtifactStagingDirectory)
           
           - script: |
               npm install

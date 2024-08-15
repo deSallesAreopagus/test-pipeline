@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TestesService } from '../testes.service';
+import { TestesService } from '../../testes.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Testes } from '../schemas/testes.schema';
+import { Testes } from '../../schemas/testes.schema';
 import { NotFoundException } from '@nestjs/common';
 
 const mock = {

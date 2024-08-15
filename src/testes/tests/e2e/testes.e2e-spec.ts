@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
-import { TestesModule } from '../src/testes/testes.module';
+import { TestesModule } from '../../testes.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { TestesService } from '../src/testes/testes.service';
+import { TestesService } from '../../testes.service';
 import { ConfigModule } from '@nestjs/config';
 
 const nonExistentValue = 'nonExistentValue';

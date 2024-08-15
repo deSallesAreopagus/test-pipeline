@@ -22,13 +22,17 @@ stages:
               npm install
               npm run build --if-present
             displayName: 'npm install and build'
-          
+
+          - script: |
+              mkdir -p $(Build.ArtifactStagingDirectory)
+              cp -R . $(Build.ArtifactStagingDirectory)
+            displayName: 'Prepare artifacts'
+
           - task: PublishPipelineArtifact@1
             inputs:
               targetPath: $(Build.ArtifactStagingDirectory)
               artifact: build
               publishLocation: pipeline
-              artifactName: 'build'
 
   - stage: Test
     displayName: Test stage
@@ -49,6 +53,7 @@ stages:
 
           - script: |
               cp $(Build.ArtifactStagingDirectory)/.env $(System.DefaultWorkingDirectory)/.env
+              cd $(Build.ArtifactStagingDirectory)
               npm install
               npm run test:unit
             displayName: 'Unit tests'
@@ -74,6 +79,7 @@ stages:
 
           - script: |
               cp $(Build.ArtifactStagingDirectory)/.env $(System.DefaultWorkingDirectory)/.env
+              cd $(Build.ArtifactStagingDirectory)
               npm install
               npm run test:integration
             displayName: 'Integration tests'
@@ -99,6 +105,7 @@ stages:
 
           - script: |
               cp $(Build.ArtifactStagingDirectory)/.env $(System.DefaultWorkingDirectory)/.env
+              cd $(Build.ArtifactStagingDirectory)
               npm install
               npm run test:e2e
             displayName: 'E2E tests'

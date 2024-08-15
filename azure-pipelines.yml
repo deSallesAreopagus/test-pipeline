@@ -1,6 +1,9 @@
 trigger:
   - main
 
+pool:
+  name: Teste
+
 stages:
   - stage: Build
     displayName: Build stage
@@ -8,7 +11,7 @@ stages:
       - job: Build
         displayName:
         pool:
-          vmImage: 'ubuntu-latest'
+          vmImage: Teste
         
         steps:
           - task: NodeTool@0

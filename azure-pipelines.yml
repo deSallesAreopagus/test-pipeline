@@ -11,7 +11,6 @@ stages:
     jobs:
       - job: Build
         displayName: 'Build'
-        
         steps:
           - task: NodeTool@0
             inputs:
@@ -23,15 +22,67 @@ stages:
               npm install
               npm run build --if-present
             displayName: 'npm install and build'
+
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: ./build
+              artifact: build
+              publishLocation: pipeline
+
+  - stage: Test
+    displayName: Test stage
+    dependsOn: Build
+    jobs:
+      - job: UnitTests
+        displayName: 'Unit Tests'
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: build
+              path: ./build
           
           - script: |
-              'npm run test:unit'
+              npm run test:unit
             displayName: 'Unit tests'
 
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: ./reports/unit
+              artifact: unit-tests
+              publishLocation: pipeline
+
+      - job: IntegrationTests
+        displayName: 'Integration Tests'
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: build
+              path: ./build
+          
           - script: |
-              'npm run test:integration'
+              npm run test:integration
             displayName: 'Integration tests'
-            
+
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: ./reports/integration
+              artifact: integration-tests
+              publishLocation: pipeline
+
+      - job: E2ETests
+        displayName: 'E2E Tests'
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifact: build
+              path: ./build
+          
           - script: |
-              'npm run test:e2e'
+              npm run test:e2e
             displayName: 'E2E tests'
+
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: ./reports/e2e
+              artifact: e2e-tests
+              publishLocation: pipeline

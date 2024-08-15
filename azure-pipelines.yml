@@ -21,12 +21,14 @@ stages:
               echo 'MONGODB_TEST_URL=$(MONGODB_TEST_URL)' >> .env
               npm install
               npm run build --if-present
+            displayName: 'npm install and build'
+          
+          - task: PublishPipelineArtifact@1
             inputs:
               targetPath: $(Build.ArtifactStagingDirectory)
               artifact: build
               publishLocation: pipeline
               artifactName: 'build'
-            displayName: 'npm install and build'
 
   - stage: Test
     displayName: Test stage
@@ -50,7 +52,7 @@ stages:
               npm install
               npm run test:unit
             displayName: 'Unit tests'
-
+          
           - task: PublishPipelineArtifact@1
             inputs:
               targetPath: $(Build.ArtifactStagingDirectory)/reports/unit
@@ -75,7 +77,7 @@ stages:
               npm install
               npm run test:integration
             displayName: 'Integration tests'
-
+          
           - task: PublishPipelineArtifact@1
             inputs:
               targetPath: $(Build.ArtifactStagingDirectory)/reports/integration
@@ -100,7 +102,7 @@ stages:
               npm install
               npm run test:e2e
             displayName: 'E2E tests'
-
+          
           - task: PublishPipelineArtifact@1
             inputs:
               targetPath: $(Build.ArtifactStagingDirectory)/reports/e2e

@@ -78,7 +78,7 @@ stages:
               path: $(Build.ArtifactStagingDirectory)
 
           - script: |
-              cp $(Build.ArtifactStagingDirectory)/.env $(System.DefaultWorkingDirectory)/.env
+              sudo cp $(Build.ArtifactStagingDirectory)/.env $(System.DefaultWorkingDirectory)/.env
               cd $(Build.ArtifactStagingDirectory)
               npm install
               npm run test:integration
@@ -104,7 +104,7 @@ stages:
               path: $(Build.ArtifactStagingDirectory)
 
           - script: |
-              cp $(Build.ArtifactStagingDirectory)/.env $(System.DefaultWorkingDirectory)/.env
+              sudo cp $(Build.ArtifactStagingDirectory)/.env $(System.DefaultWorkingDirectory)/.env
               cd $(Build.ArtifactStagingDirectory)
               npm install
               npm run test:e2e

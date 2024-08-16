@@ -14,8 +14,9 @@ export default {
       'jest-junit',
       {
         outputDirectory: './reports/e2e',
-        outputName: `junit_${timestamp}.xml`,
+        outputName: `e2e_log_${timestamp}.xml`,
       },
     ],
   ],
+  globalTeardown: './teardown.ts',
 };

@@ -17,9 +17,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:unit": "jest --config ./test/jest-unit.config.ts",
-    "test:integration": "jest --config ./test/jest-integration.config.ts",
-    "test:e2e": "jest --config ./test/jest-e2e.config.ts"
+    "test:unit": "TEST_TYPE=unit jest --config ./test/jest-unit.config.ts",
+    "test:integration": "TEST_TYPE=integration jest --config ./test/jest-integration.config.ts",
+    "test:e2e": "TEST_TYPE=e2e jest --config ./test/jest-e2e.config.ts"
   },
   "dependencies": {
     "@azure/identity": "^4.4.1",
@@ -30,7 +30,6 @@
     "@nestjs/cqrs": "^10.2.7",
     "@nestjs/mapped-types": "*",
     "@nestjs/mongoose": "^10.0.10",
-    "@nestjs/platform-express": "^10.0.0",
     "@nestjs/typeorm": "^10.0.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
@@ -51,6 +50,7 @@
     "@shelf/jest-mongodb": "^4.3.2",
     "@types/express": "^4.17.17",
     "@types/jest": "^29.5.2",
+    "@types/multer": "^1.4.11",
     "@types/node": "^20.14.15",
     "@types/supertest": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^7.0.0",

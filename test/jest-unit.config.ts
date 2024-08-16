@@ -14,8 +14,9 @@ export default {
       'jest-junit',
       {
         outputDirectory: './reports/unit',
-        outputName: `junit_${timestamp}.xml`,
+        outputName: `unit_log_${timestamp}.xml`,
       },
     ],
   ],
+  globalTeardown: './teardown.ts',
 };

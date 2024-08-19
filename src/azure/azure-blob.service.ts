@@ -2,6 +2,8 @@ import {
   BlobServiceClient,
   BlockBlobClient,
   ContainerClient,
+  BlobHTTPHeaders,
+  BlobLeaseClient,
 } from '@azure/storage-blob';
 import { Injectable } from '@nestjs/common';
 
@@ -24,9 +26,42 @@ export class AzureBlobService {
     const blockBlobClient: BlockBlobClient =
       this.containerClient.getBlockBlobClient(blobName);
 
-    await blockBlobClient.upload(data, this.getDataLength(data));
+    const headers: BlobHTTPHeaders = {
+      blobContentDisposition: 'inline',
+    };
+
+    await blockBlobClient.upload(data, this.getDataLength(data), {
+      blobHTTPHeaders: headers,
+    });
 
     return blockBlobClient.url;
+  }
+
+  async setBlobContentDisposition(
+    blobName: string,
+    disposition: string,
+    leaseId: string,
+  ) {
+    const blockBlobClient: BlockBlobClient =
+      this.containerClient.getBlockBlobClient(blobName);
+
+    const leaseClient = blockBlobClient.getBlobLeaseClient(leaseId);
+    try {
+      await leaseClient.releaseLease();
+    } catch (e) {
+      if (e.message.includes('There is currently a lease on the blob')) {
+        console.error(
+          'Failed to release lease. Ensure the lease ID is correct and try again.',
+        );
+        throw e;
+      }
+    }
+
+    const headers: BlobHTTPHeaders = {
+      blobContentDisposition: disposition,
+    };
+
+    await blockBlobClient.setHTTPHeaders(headers);
   }
 
   private getDataLength(data: Buffer | Blob | string): number {
@@ -39,5 +74,11 @@ export class AzureBlobService {
     } else {
       throw new Error('Unsupported data type');
     }
+  }
+
+  async getBlobUrl(blobName: string): Promise<string> {
+    const blockBlobClient: BlockBlobClient =
+      this.containerClient.getBlockBlobClient(blobName);
+    return blockBlobClient.url;
   }
 }

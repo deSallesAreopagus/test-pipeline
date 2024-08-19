@@ -146,7 +146,6 @@ describe('TestesService', () => {
   it('should throw an error if update fails', async () => {
     const errorMessage = 'Error updating test object';
     const updateTest = { testValue: 'Teste Updated', otherValue: 1 };
-
     jest.spyOn(model, 'findOneAndUpdate').mockReturnValue({
       exec: jest.fn().mockRejectedValueOnce(new Error(errorMessage)),
     } as any);

@@ -46,9 +46,10 @@ export default async () => {
     if (latestFile) {
       const filePath = path.join(dirPath, latestFile);
       const data = fs.readFileSync(filePath);
+      const blobName = `${testType}/${latestFile}`;
 
       try {
-        await azureBlobService.uploadBlob(latestFile, data);
+        await azureBlobService.uploadBlob(blobName, data);
       } catch (error) {
         console.error(`Error uploading file: ${error}`);
       }

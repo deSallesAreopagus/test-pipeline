@@ -5,7 +5,7 @@ import { lastValueFrom } from 'rxjs';
 @Injectable()
 export class AppService {
   private organizationUrl: string = `https://dev.azure.com/${process.env.AZURE_ORGANIZATION}`;
-  private project: string = 'treinamento_areopagus';
+  private project: string = process.env.AZURE_PROJECT;
   private apiVersion: string = '6.0';
   private pat: string = process.env.AZURE_DEVOPS_PAT;
 

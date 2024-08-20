@@ -7,6 +7,10 @@ import { Model } from 'mongoose';
 import { getModelToken } from '@nestjs/mongoose';
 import { Testes, TestesSchema } from '../../schemas/testes.schema';
 import { ConfigModule } from '@nestjs/config';
+import {
+  MongoDBContainer,
+  StartedMongoDBContainer,
+} from '@testcontainers/mongodb';
 
 const nonExistentValue = 'nonExistentValue';
 
@@ -15,11 +19,15 @@ describe('TestesController (integration)', () => {
   let model: Model<Testes>;
 
   beforeAll(async () => {
+    const mongoContainer: StartedMongoDBContainer = await new MongoDBContainer(
+      'mongo:7.0.1',
+    ).start();
+    const dbUri = `mongodb://localhost:${mongoContainer.getMappedPort(27017)}?directConnection=true`;
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [
         TestesModule,
         ConfigModule.forRoot(),
-        MongooseModule.forRoot(process.env.MONGODB_TEST_URL),
+        MongooseModule.forRoot(dbUri),
         MongooseModule.forFeature([
           { name: Testes.name, schema: TestesSchema },
         ]),
@@ -31,7 +39,7 @@ describe('TestesController (integration)', () => {
     await app.init();
 
     model = moduleRef.get<Model<Testes>>(getModelToken(Testes.name));
-  });
+  }, 30000);
 
   afterAll(async () => {
     await app.close();

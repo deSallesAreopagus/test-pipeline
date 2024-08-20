@@ -5,6 +5,11 @@ import { TestesModule } from '../../testes.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TestesService } from '../../testes.service';
 import { ConfigModule } from '@nestjs/config';
+import { GenericContainer, Wait } from 'testcontainers';
+import {
+  MongoDBContainer,
+  StartedMongoDBContainer,
+} from '@testcontainers/mongodb';
 
 const nonExistentValue = 'nonExistentValue';
 
@@ -31,11 +36,15 @@ describe('TestesController (e2e)', () => {
   };
 
   beforeAll(async () => {
+    const mongoContainer: StartedMongoDBContainer = await new MongoDBContainer(
+      'mongo:7.0.1',
+    ).start();
+    const dbUri = `mongodb://localhost:${mongoContainer.getMappedPort(27017)}?directConnection=true`;
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [
         TestesModule,
         ConfigModule.forRoot(),
-        MongooseModule.forRoot(process.env.MONGODB_TEST_URL),
+        MongooseModule.forRoot(dbUri),
       ],
     })
       .overrideProvider(TestesService)
@@ -45,7 +54,7 @@ describe('TestesController (e2e)', () => {
     app = moduleRef.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
-  });
+  }, 30000);
 
   afterAll(async () => {
     await app.close();

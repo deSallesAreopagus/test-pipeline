@@ -38,10 +38,10 @@ export default async () => {
     return;
   }
 
-  if (!ciEnvironment) {
-    console.log('Not in CI environment. Skipping upload.');
-    return;
-  }
+  // if (!ciEnvironment) {
+  //   console.log('Not in CI environment. Skipping upload.');
+  //   return;
+  // }
 
   if (!azureBlobService) {
     console.log('AZURE_BLOB_STRING is not defined. Skipping upload.');
@@ -56,9 +56,9 @@ export default async () => {
     if (latestFile) {
       const filePath = path.join(dirPath, latestFile);
       const data = fs.readFileSync(filePath);
-      const branchName =
-        process.env.BUILD_SOURCEBRANCH.replace('refs/heads/', '') ||
-        'default-branch';
+      const branchName = process.env.BUILD_SOURCEBRANCH
+        ? process.env.BUILD_SOURCEBRANCH.replace('refs/heads/', '')
+        : 'default-branch';
 
       const blobName = `${branchName}/${testType}/${latestFile}`;
 

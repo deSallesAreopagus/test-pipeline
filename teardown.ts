@@ -56,7 +56,10 @@ export default async () => {
     if (latestFile) {
       const filePath = path.join(dirPath, latestFile);
       const data = fs.readFileSync(filePath);
-      const branchName = process.env.BRANCH_NAME || 'main';
+      const branchName =
+        process.env.BUILD_SOURCEBRANCH.replace('refs/heads/', '') ||
+        'default-branch';
+
       const blobName = `${branchName}/${testType}/${latestFile}`;
 
       try {

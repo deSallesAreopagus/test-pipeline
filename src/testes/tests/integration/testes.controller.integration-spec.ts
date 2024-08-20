@@ -21,7 +21,9 @@ describe('TestesController (integration)', () => {
   beforeAll(async () => {
     const mongoContainer: StartedMongoDBContainer = await new MongoDBContainer(
       'mongo:7.0.1',
-    ).start();
+    )
+      .withReuse()
+      .start();
     const dbUri = `mongodb://localhost:${mongoContainer.getMappedPort(27017)}?directConnection=true`;
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [

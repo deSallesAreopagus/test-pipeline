@@ -13,24 +13,12 @@ export class AppController {
   async updateBoard(@Body() body: { workItemId: number; blobName: string }) {
     const { workItemId, blobName } = body;
     const blobUrl = await this.azureBlobService.getBlobUrl(blobName);
-    const linkHtml = `<a href='${blobUrl}'>Log File</a>`;
+    const linkHtml = `<a href='${blobUrl}'>Log File: ${blobName}</a>`;
     const updateValue = `Log uploaded to: ${linkHtml}`;
     const result = await this.appService.updateWorkItem(
       workItemId,
       updateValue,
     );
     return result;
-  }
-
-  @Post('update-blob-disposition')
-  async updateBlobDisposition(@Body() body: { blobName: string }) {
-    const { blobName } = body;
-    const leaseId = process.env.AZURE_LEASE_ID;
-    await this.azureBlobService.setBlobContentDisposition(
-      blobName,
-      'inline',
-      leaseId,
-    );
-    return { message: 'Blob content disposition updated successfully.' };
   }
 }

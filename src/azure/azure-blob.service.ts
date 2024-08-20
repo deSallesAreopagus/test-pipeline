@@ -3,7 +3,6 @@ import {
   BlockBlobClient,
   ContainerClient,
   BlobHTTPHeaders,
-  BlobLeaseClient,
 } from '@azure/storage-blob';
 import { Injectable } from '@nestjs/common';
 
@@ -35,33 +34,6 @@ export class AzureBlobService {
     });
 
     return blockBlobClient.url;
-  }
-
-  async setBlobContentDisposition(
-    blobName: string,
-    disposition: string,
-    leaseId: string,
-  ) {
-    const blockBlobClient: BlockBlobClient =
-      this.containerClient.getBlockBlobClient(blobName);
-
-    const leaseClient = blockBlobClient.getBlobLeaseClient(leaseId);
-    try {
-      await leaseClient.releaseLease();
-    } catch (e) {
-      if (e.message.includes('There is currently a lease on the blob')) {
-        console.error(
-          'Failed to release lease. Ensure the lease ID is correct and try again.',
-        );
-        throw e;
-      }
-    }
-
-    const headers: BlobHTTPHeaders = {
-      blobContentDisposition: disposition,
-    };
-
-    await blockBlobClient.setHTTPHeaders(headers);
   }
 
   private getDataLength(data: Buffer | Blob | string): number {

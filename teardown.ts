@@ -38,7 +38,12 @@ export default async () => {
     return;
   }
 
-  if (!azureBlobService || !ciEnvironment) {
+  if (!ciEnvironment) {
+    console.log('Not in CI environment. Skipping upload.');
+    return;
+  }
+
+  if (!azureBlobService) {
     console.log('AZURE_BLOB_STRING is not defined. Skipping upload.');
     return;
   }
